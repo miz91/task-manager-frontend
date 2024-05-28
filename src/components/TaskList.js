@@ -1,0 +1,47 @@
+// src/components/TaskList.js
+import React, { useEffect, useState } from 'react';
+import Task from './Task';
+import TaskForm from './TaskForm'; // Import TaskForm for editing
+import axios from 'axios';
+
+const TaskList = () => {
+  const [tasks, setTasks] = useState([]);
+  const [editingTask, setEditingTask] = useState(null);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/tasks')
+      .then(response => {
+        console.log('Fetched tasks:', response.data);
+        setTasks(response.data);
+      })
+      .catch(error => console.error('There was an error fetching the tasks!', error));
+  }, []);
+
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:5000/api/tasks/${id}`)
+      .then(() => setTasks(tasks.filter(task => task._id !== id)))
+      .catch(error => console.error('There was an error deleting the task!', error));
+  };
+
+  const handleEdit = (task) => {
+    setEditingTask(task);
+  };
+
+  const handleUpdate = (updatedTask) => {
+    setTasks(tasks.map(task => (task._id === updatedTask._id ? updatedTask : task)));
+    setEditingTask(null);
+  };
+
+  return (
+    <div>
+      {tasks.map(task => (
+        <Task key={task._id} task={task} onDelete={handleDelete} onEdit={handleEdit} />
+      ))}
+      {editingTask && (
+        <TaskForm task={editingTask} onUpdateTask={handleUpdate} />
+      )}
+    </div>
+  );
+};
+
+export default TaskList;
