@@ -1,4 +1,3 @@
-// src/components/TaskForm.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -18,13 +17,13 @@ const TaskForm = ({ onAddTask, task, onUpdateTask }) => {
     const newTask = { title, description, completed: false };
 
     if (task) {
-      axios.put(`http://localhost:5000/api/tasks/${task._id}`, newTask)
+      axios.put(`${process.env.REACT_APP_API_URL}/tasks/${task._id}`, newTask)
         .then(response => {
           onUpdateTask(response.data);
         })
         .catch(error => console.error('There was an error updating the task!', error));
     } else {
-      axios.post('http://localhost:5000/api/tasks', newTask)
+      axios.post(`${process.env.REACT_APP_API_URL}/tasks`, newTask)
         .then(response => {
           console.log('Task added:', response.data);
           setTitle('');

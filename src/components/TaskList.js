@@ -1,4 +1,3 @@
-// src/components/TaskList.js
 import React, { useEffect, useState } from 'react';
 import Task from './Task';
 import TaskForm from './TaskForm'; // Import TaskForm for editing
@@ -9,7 +8,7 @@ const TaskList = () => {
   const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/tasks')
+    axios.get(`${process.env.REACT_APP_API_URL}/tasks`)
       .then(response => {
         console.log('Fetched tasks:', response.data);
         setTasks(response.data);
@@ -18,7 +17,7 @@ const TaskList = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/tasks/${id}`)
+    axios.delete(`${process.env.REACT_APP_API_URL}/tasks/${id}`)
       .then(() => setTasks(tasks.filter(task => task._id !== id)))
       .catch(error => console.error('There was an error deleting the task!', error));
   };
