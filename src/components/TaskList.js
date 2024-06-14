@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Task from './Task';
 import TaskForm from './TaskForm';
-import axios from 'axios';
+
+const apiURL = process.env.REACT_APP_API_URL;
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/tasks`)
+    axios.get(`${apiURL}/tasks`)
       .then(response => {
+        console.log('Fetched tasks:', response.data);
         setTasks(response.data);
       })
-      .catch(error => console.error('There was an error fetching the tasks!', error));
+      .catch(error => {
+        console.error('There was an error fetching the tasks!', error);
+      });
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`${process.env.REACT_APP_API_URL}/tasks/${id}`)
+    axios.delete(`${apiURL}/tasks/${id}`)
       .then(() => {
         setTasks(tasks.filter(task => task._id !== id));
       })
-      .catch(error => console.error('There was an error deleting the task!', error));
+      .catch(error => {
+        console.error('There was an error deleting the task!', error);
+      });
   };
 
   const handleEdit = (task) => {
