@@ -11,3 +11,4 @@ const Task = ({ task, onDelete, onEdit }) => (
 );
 
 export default Task;
+

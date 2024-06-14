@@ -25,10 +25,9 @@ const TaskForm = ({ onAddTask, task, onUpdateTask }) => {
     } else {
       axios.post(`${process.env.REACT_APP_API_URL}/tasks`, newTask)
         .then(response => {
-          console.log('Task added:', response.data);
+          onAddTask(response.data);
           setTitle('');
           setDescription('');
-          onAddTask(response.data);
         })
         .catch(error => console.error('There was an error creating the task!', error));
     }
